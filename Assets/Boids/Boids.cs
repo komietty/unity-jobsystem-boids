@@ -95,9 +95,17 @@ public class Boids : MonoBehaviour {
         int n => position.Length;
 
         public void Execute() {
-            result[0] = 0;
+            for (int i = 0; i < 8; i++)  result[i] = 0;
             for (int i = 0; i < n; i++) {
-                if(position[i].x > 0) result[0] += 1;
+                var p = position[i];
+                if      (p.x < 0 && p.y < 0 && p.z < 0) result[0]++;
+                else if (p.x > 0 && p.y < 0 && p.z < 0) result[1]++;
+                else if (p.x < 0 && p.y > 0 && p.z < 0) result[2]++;
+                else if (p.x < 0 && p.y < 0 && p.z > 0) result[3]++;
+                else if (p.x > 0 && p.y > 0 && p.z < 0) result[4]++;
+                else if (p.x > 0 && p.y < 0 && p.z > 0) result[5]++;
+                else if (p.x < 0 && p.y > 0 && p.z > 0) result[6]++;
+                else if (p.x > 0 && p.y > 0 && p.z > 0) result[7]++;
             }
         }
     }
@@ -129,7 +137,7 @@ public class Boids : MonoBehaviour {
         vel = new NativeArray<Vector3>(num, Allocator.Persistent);
         acc = new NativeArray<Vector3>(num, Allocator.Persistent);
         trs = new TransformAccessArray(objs);
-        rst = new NativeArray<int>(1, Allocator.Persistent);
+        rst = new NativeArray<int>(8, Allocator.Persistent);
         rnd = new NativeArray<Random>(num, Allocator.Persistent);
 
         for (int i = 0; i < num; i++) {
@@ -145,16 +153,36 @@ public class Boids : MonoBehaviour {
         var jobWall = new UpdateWall { position = pos, accel = acc, scale = areaSize};
         var jobSmlt = new UpdateSmlt { position = pos, velocity = vel, accel = acc, dstThreshold = distThreshold, weights = simWeight};
         var jobMove = new UpdateMove { position = pos, velocity = vel, accel = acc, dt = Time.deltaTime, limit = velThreshold};
+        var jobCunt = new CountJob { position = pos, result = rst };
         var handlerWall = jobWall.Schedule(num, 0);
         var handlerSmlt = jobSmlt.Schedule(num, 0, handlerWall);
         var handlerMove = jobMove.Schedule(trs, handlerSmlt);
-        handlerMove.Complete();
+        var handlerCunt = jobCunt.Schedule(handlerMove);
+
+        handlerCunt.Complete();
     }
 
     void OnDrawGizmos() {
         Gizmos.DrawWireCube(Vector3.zero, areaSize);
     }
+
+    string[] blocks = new string[] {
+        "block-left-down-back",
+        "block-right-down-back",
+        "block-left-top-back",
+        "block-left-down-foward",
+        "block-right-top-back",
+        "block-right-down-forward",
+        "block-left-top-foward",
+        "block-right-top-foward"
+    };
+
     void OnGUI() {
+        GUI.skin.label.fontSize = 20;
+        GUI.Label(new Rect(10, 10, 300, 30), $"instance num: {num}");
+        GUI.Label(new Rect(10, 30, 300, 30), $"----------------------------");
+        for (int i = 0; i < 8; i++)
+            GUI.Label(new Rect(10, i * 30 + 60, 300, 30), $"{blocks[i]}: {rst[i]}");
     }
 
     void OnDestroy() {
