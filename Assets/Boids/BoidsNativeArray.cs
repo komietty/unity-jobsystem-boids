@@ -6,7 +6,7 @@ using Unity.Jobs;
 using Unity.Burst;
 using Random = Unity.Mathematics.Random;
 
-public class Boids : MonoBehaviour {
+public class BoidsNativeArray : MonoBehaviour {
 
     #region Job
     [BurstCompile]
@@ -57,8 +57,8 @@ public class Boids : MonoBehaviour {
 
     [BurstCompile]
     struct UpdateSmlt : IJobParallelFor {
-        [ReadOnly]  public NativeArray<Vector3> position;
-        [ReadOnly]  public NativeArray<Vector3> velocity;
+        [ReadOnly] public NativeArray<Vector3> position;
+        [ReadOnly] public NativeArray<Vector3> velocity;
         public NativeArray<Vector3> accel;
         public Vector3 weights;
         public float dstThreshold;
@@ -68,8 +68,8 @@ public class Boids : MonoBehaviour {
             Vector3 avgSpr = Vector3.zero,
                     avgVel = Vector3.zero,
                     avgPos = Vector3.zero,
-                    pos    = position[id],
-                    vel    = velocity[id];
+                    pos = position[id],
+                    vel = velocity[id];
 
             for (int j = 0; j < n; j++) {
                 if (j == id) continue;
@@ -93,10 +93,10 @@ public class Boids : MonoBehaviour {
         int n => position.Length;
 
         public void Execute() {
-            for (int i = 0; i < 8; i++)  result[i] = 0;
+            for (int i = 0; i < 8; i++) result[i] = 0;
             for (int i = 0; i < n; i++) {
                 var p = position[i];
-                if      (p.x < 0 && p.y < 0 && p.z < 0) result[0]++;
+                if (p.x < 0 && p.y < 0 && p.z < 0) result[0]++;
                 else if (p.x > 0 && p.y < 0 && p.z < 0) result[1]++;
                 else if (p.x < 0 && p.y > 0 && p.z < 0) result[2]++;
                 else if (p.x < 0 && p.y < 0 && p.z > 0) result[3]++;
@@ -111,7 +111,7 @@ public class Boids : MonoBehaviour {
     #endregion
 
     [SerializeField] protected int num;
-    [SerializeField] protected GameObject prefab; 
+    [SerializeField] protected GameObject prefab;
     [SerializeField] protected Vector3 areaSize;
     [SerializeField] protected float distThreshold;
     [SerializeField] Vector2 velThreshold;
@@ -119,7 +119,7 @@ public class Boids : MonoBehaviour {
     protected Transform[] objs;
     protected NativeArray<Vector3> pos, vel, acc;
     protected TransformAccessArray trs;
-    protected NativeArray<Random>  rnd;
+    protected NativeArray<Random> rnd;
     protected NativeArray<int> rst;
     protected Random seed;
 
@@ -148,9 +148,9 @@ public class Boids : MonoBehaviour {
 
     void Update() {
         for (int i = 0; i < num; i++) rnd[i] = new Random(seed.NextUInt());
-        var jobWall = new UpdateWall { position = pos, accel = acc, scale = areaSize};
-        var jobSmlt = new UpdateSmlt { position = pos, velocity = vel, accel = acc, dstThreshold = distThreshold, weights = simWeight};
-        var jobMove = new UpdateMove { position = pos, velocity = vel, accel = acc, dt = Time.deltaTime, limit = velThreshold};
+        var jobWall = new UpdateWall { position = pos, accel = acc, scale = areaSize };
+        var jobSmlt = new UpdateSmlt { position = pos, velocity = vel, accel = acc, dstThreshold = distThreshold, weights = simWeight };
+        var jobMove = new UpdateMove { position = pos, velocity = vel, accel = acc, dt = Time.deltaTime, limit = velThreshold };
         var jobBlck = new UpdateBlck { position = pos, result = rst };
         var handlerWall = jobWall.Schedule(num, 0);
         var handlerSmlt = jobSmlt.Schedule(num, 0, handlerWall);
