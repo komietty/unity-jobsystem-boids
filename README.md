@@ -2,11 +2,11 @@
 
 Unity job system and burst minimalist sample (less than 200 rows code!) without ECS.
 
-### Array sample
+### NativeArray sample
 
 <img src="Imgs/array.gif" width=100%>
 
-### List sample
+### NativeList sample
 
 add / remove instance methods available.
 
