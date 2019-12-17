@@ -1,6 +1,6 @@
 # unity-jobsystem-boids
 
-Unity job system and burst minimumist sample (less than 200 rows code!) without ECS.
+Unity job system and burst minimalist sample (less than 200 rows code!) without ECS.
 
 <img src="Imgs/dst.gif" width=100%>
 
