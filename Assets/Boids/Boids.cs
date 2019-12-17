@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Unity.Collections;
+﻿using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Jobs;
@@ -88,8 +86,8 @@ public class Boids : MonoBehaviour {
         }
     }
 
-    [Unity.Burst.BurstCompile]
-    struct CountJob : IJob {
+    [BurstCompile]
+    struct UpdateBlck : IJob {
         public NativeArray<Vector3> position;
         public NativeArray<int> result;
         int n => position.Length;
@@ -153,13 +151,13 @@ public class Boids : MonoBehaviour {
         var jobWall = new UpdateWall { position = pos, accel = acc, scale = areaSize};
         var jobSmlt = new UpdateSmlt { position = pos, velocity = vel, accel = acc, dstThreshold = distThreshold, weights = simWeight};
         var jobMove = new UpdateMove { position = pos, velocity = vel, accel = acc, dt = Time.deltaTime, limit = velThreshold};
-        var jobCunt = new CountJob { position = pos, result = rst };
+        var jobBlck = new UpdateBlck { position = pos, result = rst };
         var handlerWall = jobWall.Schedule(num, 0);
         var handlerSmlt = jobSmlt.Schedule(num, 0, handlerWall);
         var handlerMove = jobMove.Schedule(trs, handlerSmlt);
-        var handlerCunt = jobCunt.Schedule(handlerMove);
+        var handlerBlck = jobBlck.Schedule(handlerMove);
 
-        handlerCunt.Complete();
+        handlerBlck.Complete();
     }
 
     void OnDrawGizmos() {
