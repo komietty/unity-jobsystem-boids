@@ -245,8 +245,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   folderName: Capture
   framerate: 30
-  maxRecordSeconds: 20
-  recode: 1
+  maxRecordSeconds: 15
+  recode: 0
 --- !u!20 &963194227
 Camera:
   m_ObjectHideFlags: 0
