@@ -14,7 +14,7 @@ add / remove instance methods available.
 
 ## Compatibility
 
-Tested on Unity 2019.3.0f1, windows10 (RTX 2080 max-q).
+Tested on Unity 2019.3.11f1, windows10 (RTX 2080 max-q).
 
 ## Informative Source Code
 
