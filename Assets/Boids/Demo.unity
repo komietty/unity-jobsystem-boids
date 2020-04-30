@@ -335,10 +335,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   initNum: 10
   prefab: {fileID: 4950830921021070585, guid: 81910fc2cc865994ba8a1da7c3b6a0f6, type: 3}
-  areaSize: {x: 20, y: 20, z: 20}
+  areaSize: {x: 25, y: 25, z: 25}
   distThreshold: 5
   velThreshold: {x: 0, y: 4}
-  simWeight: {x: 8, y: 6, z: 1}
+  simWeight: {x: 4, y: 0.8, z: 0.3}
   add: 97
   remove: 114
 --- !u!4 &1361161912
@@ -400,7 +400,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   num: 3000
   prefab: {fileID: 4950830921021070585, guid: 81910fc2cc865994ba8a1da7c3b6a0f6, type: 3}
-  areaSize: {x: 20, y: 20, z: 20}
+  areaSize: {x: 25, y: 25, z: 25}
   distThreshold: 5
   velThreshold: {x: 0, y: 4}
-  simWeight: {x: 8, y: 6, z: 1}
+  simWeight: {x: 4, y: 0.8, z: 0.3}

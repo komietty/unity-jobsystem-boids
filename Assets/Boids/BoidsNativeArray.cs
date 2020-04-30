@@ -82,7 +82,7 @@ public class BoidsNativeArray : MonoBehaviour {
                     avgPos += tgtPos;
                 }
             }
-            accel[id] += (avgSpr * weights.x + avgVel * weights.y + avgPos * weights.z) / n;
+            accel[id] += avgSpr / n * weights.x + avgVel / n * weights.y + (avgPos / n - pos) * weights.z;
         }
     }
 
@@ -114,8 +114,8 @@ public class BoidsNativeArray : MonoBehaviour {
     [SerializeField] protected GameObject prefab;
     [SerializeField] protected Vector3 areaSize;
     [SerializeField] protected float distThreshold;
-    [SerializeField] Vector2 velThreshold;
-    [SerializeField] Vector3 simWeight;
+    [SerializeField] protected Vector2 velThreshold;
+    [SerializeField] protected Vector3 simWeight;
     protected Transform[] objs;
     protected NativeArray<Vector3> pos, vel, acc;
     protected TransformAccessArray trs;

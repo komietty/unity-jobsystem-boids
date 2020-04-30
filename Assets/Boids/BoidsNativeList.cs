@@ -81,7 +81,8 @@ public class BoidsNativeList : MonoBehaviour {
                     avgPos += tgtPos;
                 }
             }
-            accel[id] += (avgSpr * weights.x + avgVel * weights.y + avgPos * weights.z) / n;
+
+            accel[id] += avgSpr / n * weights.x + avgVel / n * weights.y + (avgPos / n - pos) * weights.z;
         }
     }
 
@@ -113,8 +114,8 @@ public class BoidsNativeList : MonoBehaviour {
     [SerializeField] protected GameObject prefab;
     [SerializeField] protected Vector3 areaSize;
     [SerializeField] protected float distThreshold;
-    [SerializeField] Vector2 velThreshold;
-    [SerializeField] Vector3 simWeight;
+    [SerializeField] protected Vector2 velThreshold;
+    [SerializeField] protected Vector3 simWeight;
     [SerializeField] KeyCode add = KeyCode.A;
     [SerializeField] KeyCode remove = KeyCode.R;
     protected NativeList<Vector3> pos, vel, acc;
