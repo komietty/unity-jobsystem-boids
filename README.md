@@ -19,6 +19,3 @@ Tested on Unity 2019.3.11f1, windows10 (RTX 2080 max-q).
 ## Informative Source Code
 
 TransformAccessArray - https://github.com/Unity-Technologies/UnityCsReference/blob/master/Runtime/Transform/ScriptBindings/TransformAccessArray.bindings.cs
-
-## License
-[MIT](LICENSE)
